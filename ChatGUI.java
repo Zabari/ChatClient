@@ -1,31 +1,44 @@
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-
+/*
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
-import javax.swing.SwingUtilities;
+import javax.swing.SwingUtilities;*/
+import javax.swing.*;
 public class ChatGUI extends JFrame implements ActionListener{
-    static JFrame frame = new JFrame();
-    static JButton send = new JButton("Send");
-    public void actionPerformed(ActionEvent event){
-	send.setText("Sent!");
+    JFrame frame = new JFrame();
+    JButton send = new JButton("Send");
+    JTextField writeHere = new JTextField(290);
+    Session chatSession;
+    public ChatGUI(Session x){
+	chatSession=x;
     }
-    public void go(){
-	send.addActionListener(this);
+
+    public class SentButtonListener{
+	public void actionPerformed(ActionEvent event){
+	    send.setText("Sent!");
+	}
+    }
+    public class TextBoxListener{
+	public void actionPerformed(ActionEvent event){
+	}
+    }
+    public void make(){
+	send.addActionListener(new SentButtonListener());
 	frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 	frame.setSize(300, 300);
 	frame.setLocationRelativeTo( null );
 	frame.getContentPane().add(send);
+	frame.setVisible(true);
     }
     public static void main (String [] args){
-	ChatGUI try1= new ChatGUI();
-	try1.go();
+	ChatGUI gui= new ChatGUI();
+	gui.make();
 
 
 
 
-	frame.setVisible(true);
 
     }
 }
