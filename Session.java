@@ -6,8 +6,8 @@
 public class Session {
     ChatGUI sessionGUI; // GUI
     Server sessionServer; // Server
-    Person user; // Person using program
-    Person partner; // Interlocutor
+    User user; // Person using program
+    User partner; // Interlocutor
 
     public void start() {
         createConnection();
@@ -19,8 +19,8 @@ public class Session {
 
         // Returns array of ints, containing IDs of users
         int[] userIDs = Server.establishConnection(); 
-        user = new Person(userIDs[0]); // Create user and store ID
-        partner = new Person(userIDs[1]); // Create interlocutor and store ID
+        user = new User (userIDs[0]); // Create user and store ID
+        partner = new User (userIDs[1]); // Create interlocutor and store ID
     }
 
     public void createGUI() {
