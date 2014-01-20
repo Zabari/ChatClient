@@ -15,19 +15,19 @@ import org.jdesktop.xswingx.*;
 import javax.swing.*;
 import java.awt.GridLayout;
 
-public class GUI extends JFrame {
+public class GUI extends JFrame implements ActionListener {
 
-    public Session _chatSession;
-    public User _user;
-    public User _partner;
+    private Session _chatSession;
+    private User _user;
+    private User _partner;
 
-    GridLayout g = new GridLayout(3,4);
-    JFrame frame = new JFrame();
+    private GridLayout g = new GridLayout(3,4);
+    private JFrame frame = new JFrame();
 
-    JTextArea display = new JTextArea();
-    JButton send = new JButton("Send");
-    JTextArea writeHere = new JTextArea();
-    String message;
+    private JTextArea display = new JTextArea();
+    private JButton send = new JButton("Send");
+    private JTextArea writeHere = new JTextArea();
+    private String message;
 
     public GUI() { }
 
@@ -39,31 +39,29 @@ public class GUI extends JFrame {
         make();
     }
 
-    public class SentButtonListener implements ActionListener{
-        public void actionPerformed(ActionEvent event){
-            message =  writeHere.getText();
-            writeHere.setText("");
-            if (message.trim().length() > 0) {
+    public void actionPerformed(ActionEvent event){
+	message =  writeHere.getText();
+	writeHere.setText("");
+	if (message.trim().length() > 0) {
 
-                // Remove trailing whitespace
-                String msgContent = message.replaceFirst("\\s+$", ""); 
+	    // Remove trailing whitespace
+	    String msgContent = message.replaceFirst("\\s+$", ""); 
 
-                // Prepare metadata for Messge object
-                int senderID = _user.getID();
-                int receiverID = _partner.getID();
-                long timestamp = System.currentTimeMillis() / 1000L;
+	    // Prepare metadata for Messge object
+	    int senderID = _user.getID();
+	    int receiverID = _partner.getID();
+	    long timestamp = System.currentTimeMillis() / 1000L;
 
-                // Create new Message instance
-                Message newMessage = new Message(
-                        msgContent, senderID, receiverID, senderID);
+	    // Create new Message instance
+	    Message newMessage = new Message(
+			 msgContent, senderID, receiverID, senderID);
 
-                // Pass it on to Session, which will pass it on to Server
-                _chatSession.sendMessage(newMessage);
+	    // Pass it on to Session, which will pass it on to Server
+	    _chatSession.sendMessage(newMessage);
 
-                // Add user's message to GUI
-                display.append("You: "+ newMessage + "\n");
-            }
-        }
+	    // Add user's message to GUI
+	    display.append("You: "+ newMessage + "\n");
+	}
     }
 
     // Called by Session when it is notified by Server of new message
@@ -71,7 +69,7 @@ public class GUI extends JFrame {
         display.append("Partner: "+ msg + "\n");
     }
 
-    public void make(){
+    private void make(){
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setSize(500, 500);
         frame.setLocationRelativeTo( null );
@@ -88,7 +86,7 @@ public class GUI extends JFrame {
 
         frame.getContentPane().add(send);
         PromptSupport.setPrompt("Type Here!",writeHere);
-        send.addActionListener(new SentButtonListener());
+        send.addActionListener(this);
 
         frame.setVisible(true);
     }
@@ -99,6 +97,5 @@ public class GUI extends JFrame {
 
     public static void main (String[] args){
         GUI testGUI = new GUI();
-        testGUI.make();
     }
 }
