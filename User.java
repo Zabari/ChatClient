@@ -1,10 +1,16 @@
+/*
+ * class USER
+ * Users and their metadata
+*/
+
 public class User {
-    private int _id;
-    public User(int id) {
-        _id = id;
+    private int _ID; // Unique identifier for Server
+
+    public User(int ID) {
+        _ID = ID;
     }
 
-    public int getId() {
-        return _id;
+    public int getID() {
+        return _ID;
     }
 }

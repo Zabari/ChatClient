@@ -1,3 +1,8 @@
+/*
+ * class GUI
+ * Interface of chat program
+*/
+
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.PrintWriter;
@@ -9,9 +14,12 @@ import org.jdesktop.xswingx.*;
 
 import javax.swing.*;
 import java.awt.GridLayout;
+
 public class GUI extends JFrame {
 
-    Session chatSession;
+    public Session _chatSession;
+    public User _user;
+    public User _partner;
 
     GridLayout g = new GridLayout(3,4);
     JFrame frame = new JFrame();
@@ -23,8 +31,11 @@ public class GUI extends JFrame {
 
     public GUI() { }
 
-    public GUI(Session x){
-        chatSession=x;
+    // GUI is created by Session
+    public GUI (Session chatSession, User user, User partner) {
+        _chatSession = chatSession;
+        _user = user;
+        _partner = partner;
         make();
     }
 
@@ -32,13 +43,31 @@ public class GUI extends JFrame {
         public void actionPerformed(ActionEvent event){
             message =  writeHere.getText();
             writeHere.setText("");
-            if (message.trim().length() > 0)
-                display.append("You: "+ message.replaceFirst("\\s+$", "") + "\n");
+            if (message.trim().length() > 0) {
+
+                // Remove trailing whitespace
+                String msgContent = message.replaceFirst("\\s+$", ""); 
+
+                // Prepare metadata for Messge object
+                int senderID = _user.getID();
+                int receiverID = _partner.getID();
+                long timestamp = System.currentTimeMillis() / 1000L;
+
+                // Create new Message instance
+                Message newMessage = new Message(
+                        msgContent, senderID, receiverID, senderID);
+
+                // Pass it on to Session, which will pass it on to Server
+                _chatSession.sendMessage(newMessage);
+
+                // Add user's message to GUI
+                display.append("You: "+ newMessage + "\n");
+            }
         }
     }
 
-    // Used to display incoming messages
-    public void displayMessage(String msg) {
+    // Called by Session when it is notified by Server of new message
+    public void displayMessage(Message msg) {
         display.append("Partner: "+ msg + "\n");
     }
 

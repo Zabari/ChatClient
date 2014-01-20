@@ -1,5 +1,12 @@
+/*
+ * class SERVER
+ * Sends and receives messages
+*/
+
 public class Server {
     private Session _chatSession;
+    private User _user;
+    private User _partner;
 
     public Server(Session chatSession) {
         _chatSession = chatSession;
@@ -12,8 +19,13 @@ public class Server {
         return userIDs;
     }
 
+    public void setUsers(User user, User partner) {
+        _user = user;
+        _partner = partner;
+    }
+
     // Triggered by Session, which is triggered by GUI when user hits send
-    public void sendMessage(String msg) {
+    public void sendMessage(Message msg) {
 
     }
 }
