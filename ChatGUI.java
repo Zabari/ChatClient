@@ -5,6 +5,8 @@ import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.File;
+import org.jdesktop.xswingx.*;
+
 /*
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -16,10 +18,11 @@ public class ChatGUI extends JFrame{
 
     GridLayout g = new GridLayout(4,4);
     JFrame frame = new JFrame();
-    JLabel display = new JLabel();
+    JTextArea display = new JTextArea();
     JButton send = new JButton("Send");
     JButton log = new JButton("See your chat so far!");
-    JTextField writeHere = new JTextField(290);
+    JTextArea writeHere = new JTextArea();
+
     String message;
 
   
@@ -34,13 +37,15 @@ public class ChatGUI extends JFrame{
 	public void actionPerformed(ActionEvent event){
 	    message =  writeHere.getText();
 	    writeHere.setText("");
+	    /*
 	    try(PrintWriter chatLog = new PrintWriter(new BufferedWriter(new FileWriter("ChatLog.txt", true)))) {
 		    chatLog.println("You: "+message);
 		}
 	    catch (IOException ex)  {
 		System.out.println("Could not open file.  Try running as administrator or root.");
-	    }
-	    display.setText("You :"+message);
+	    } */
+	    if (message.trim().length()>0)
+		display.append("You: "+message.replaceFirst("\\s+$", "")+"\n");
 	}
     }
     public void make(){
@@ -48,11 +53,17 @@ public class ChatGUI extends JFrame{
 	frame.setSize(500, 500);
 	frame.setLocationRelativeTo( null );
 	frame.setLayout(g);
-	frame.getContentPane().add(display);
-	frame.getContentPane().add(writeHere);
+	frame.getContentPane().add(new JScrollPane(display));
+        display.setLineWrap(true);
+        display.setWrapStyleWord(true);
+	display.setEditable(false);
+	frame.getContentPane().add(new JScrollPane(writeHere));
+        writeHere.setLineWrap(true);
+        writeHere.setWrapStyleWord(true);
 	frame.getContentPane().add(send);
-	frame.getContentPane().add(log);
-	log.addActionListener(new ActionListener()
+	PromptSupport.setPrompt("Type Here!",writeHere);
+	//	frame.getContentPane().add(log);
+	/*	log.addActionListener(new ActionListener()
 	    {
 		public void actionPerformed(ActionEvent e){
 		    File cLog=new File("Chatlog.txt"); 
@@ -62,10 +73,10 @@ public class ChatGUI extends JFrame{
 		    catch (IOException ex){
 		    }
 		}
-	    });
+		}); */
 
 	send.addActionListener(new SentButtonListener());
-	writeHere.addActionListener (new ActionListener()
+	/*	writeHere.addActionListener (new ActionListener()
 	    {
 		public void actionPerformed(ActionEvent event){
 		    message =  writeHere.getText();
@@ -78,7 +89,7 @@ public class ChatGUI extends JFrame{
 			System.out.println("Could not open file.  Try running as administrator or root.");
 		    }
 		}
-	    });
+		}); */
 	frame.setVisible(true);
     }
     public String getMessage(){
