@@ -7,6 +7,10 @@
 
 # Java class files
 *.class
+!PromptSupport.class
+!PromptSupport$1.class
+!PromptSupport$FocusBehavior.class
+!PromptSupport$UIChangeHandler.class
 
 # generated files
 bin/
