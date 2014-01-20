@@ -1,12 +1,12 @@
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.GridLayout;
 /*
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.SwingUtilities;*/
 import javax.swing.*;
+import java.awt.GridLayout;
 public class ChatGUI extends JFrame{
     GridLayout g = new GridLayout(4,4);
     JFrame frame = new JFrame();
@@ -24,16 +24,26 @@ public class ChatGUI extends JFrame{
     public class SentButtonListener implements ActionListener{
 	public void actionPerformed(ActionEvent event){
 	    message =  writeHere.getText();
-	    writeHere = new JTextField(290);
+	    writeHere.setText("");
+		    System.out.println(message);
 	}
     }
     public void make(){
-	send.addActionListener(new SentButtonListener());
 	frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 	frame.setSize(500, 500);
 	frame.setLocationRelativeTo( null );
 	frame.setLayout(g);
+	frame.getContentPane().add(writeHere);
 	frame.getContentPane().add(send);
+	send.addActionListener(new SentButtonListener());
+	writeHere.addActionListener (new ActionListener()
+	    {
+		public void actionPerformed(ActionEvent event){
+		    message =  writeHere.getText();
+		    writeHere.setText("");
+		    System.out.println(message);
+		}
+	    });
 	frame.setVisible(true);
     }
     public String getMessage(){
@@ -42,7 +52,6 @@ public class ChatGUI extends JFrame{
     public static void main (String [] args){
 	ChatGUI gui= new ChatGUI();
 	gui.make();
-	gui.getMessage();
 
 
 
