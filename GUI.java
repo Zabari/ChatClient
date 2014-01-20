@@ -9,7 +9,9 @@ import org.jdesktop.xswingx.*;
 
 import javax.swing.*;
 import java.awt.GridLayout;
-public class ChatGUI extends JFrame {
+public class GUI extends JFrame {
+
+    Session chatSession;
 
     GridLayout g = new GridLayout(3,4);
     JFrame frame = new JFrame();
@@ -17,16 +19,14 @@ public class ChatGUI extends JFrame {
     JTextArea display = new JTextArea();
     JButton send = new JButton("Send");
     JTextArea writeHere = new JTextArea();
-
     String message;
 
-  
-    /* Session chatSession;
-       public ChatGUI(Session x){
-           chatSession=x;
-           make();
-       }
-    */
+    public GUI() { }
+
+    public GUI(Session x){
+        chatSession=x;
+        make();
+    }
 
     public class SentButtonListener implements ActionListener{
         public void actionPerformed(ActionEvent event){
@@ -35,6 +35,11 @@ public class ChatGUI extends JFrame {
             if (message.trim().length() > 0)
                 display.append("You: "+ message.replaceFirst("\\s+$", "") + "\n");
         }
+    }
+
+    // Used to display incoming messages
+    public void displayMessage(String msg) {
+        display.append("Partner: "+ msg + "\n");
     }
 
     public void make(){
@@ -64,7 +69,7 @@ public class ChatGUI extends JFrame {
     }
 
     public static void main (String[] args){
-        ChatGUI gui= new ChatGUI();
-        gui.make();
+        GUI testGUI = new GUI();
+        testGUI.make();
     }
 }

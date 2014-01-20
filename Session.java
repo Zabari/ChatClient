@@ -4,7 +4,7 @@
 */
 
 public class Session {
-    ChatGUI sessionGUI; // GUI
+    GUI sessionGUI; // GUI
     Server sessionServer; // Server
     User user; // Person using program
     User partner; // Interlocutor
@@ -14,20 +14,20 @@ public class Session {
         createGUI();
     }
 
-    public int[] createConnection() {
+    public void createConnection() {
         sessionServer = new Server(this);
 
         // Returns array of ints, containing IDs of users
-        int[] userIDs = Server.establishConnection(); 
+        int[] userIDs = sessionServer.establishConnection(); 
         user = new User (userIDs[0]); // Create user and store ID
         partner = new User (userIDs[1]); // Create interlocutor and store ID
     }
 
     public void createGUI() {
-        sessionGUI = new sessionGUI(this);
+        sessionGUI = new GUI(this);
     }
 
-    // triggered by ChatGUI
+    // triggered by sessionGUI
     public void sendMessage(String msg) { 
         sessionServer.sendMessage(msg);
     }
