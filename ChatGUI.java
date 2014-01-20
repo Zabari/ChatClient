@@ -71,6 +71,12 @@ public class ChatGUI extends JFrame{
 		    message =  writeHere.getText();
 		    writeHere.setText("");
 		    display.setText("You: "+message);
+		    try(PrintWriter chatLog = new PrintWriter(new BufferedWriter(new FileWriter("ChatLog.txt", true)))) {
+			    chatLog.println("You: "+message);
+			}
+		    catch (IOException ex)  {
+			System.out.println("Could not open file.  Try running as administrator or root.");
+		    }
 		}
 	    });
 	frame.setVisible(true);
