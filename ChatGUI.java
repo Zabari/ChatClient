@@ -16,7 +16,7 @@ import javax.swing.*;
 import java.awt.GridLayout;
 public class ChatGUI extends JFrame{
 
-    GridLayout g = new GridLayout(4,4);
+    GridLayout g = new GridLayout(3,4);
     JFrame frame = new JFrame();
     JTextArea display = new JTextArea();
     JButton send = new JButton("Send");
