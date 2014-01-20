@@ -7,6 +7,8 @@
 
 # Java class files
 *.class
+!org/jdesktop/xswingx/*
+!org/jdesktop/xswingx/plaf/*
 
 # generated files
 bin/
