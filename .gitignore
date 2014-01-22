@@ -32,3 +32,4 @@ proguard/
 
 # vim swp files
 *.swp
+*~
