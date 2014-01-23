@@ -3,42 +3,48 @@
  * Command center of program
 */
 
-// Import BlockinQueue, ArrayBlockinQueue
+// For BlockingQueue, ArrayBlockingQueue
 import java.util.concurrent.*;
+//
+// For Socket
+import java.net.*;
+
+// For ObjectInputStream, ObjectOutputStream
+import java.io.*;
 
 public class Session {
-    GUI sessionGUI; // Interface
-    Server sessionServer; // Server
-    User user; // Person using program
-    User partner; // Interlocutor
+    public final boolean LOCAL_TESTING = true;
+
+    private GUI sessionGUI; // Interface
+    private Connection sessionConnection;
+
+    private Thread _sendMessages;
+    private Thread _receiveMessages;
 
     private BlockingQueue<Message> incoming = new ArrayBlockingQueue(20);
     private BlockingQueue<Message> outgoing = new ArrayBlockingQueue(20);
 
 
     public void start() {
-        createConnection();
         createGUI();
-    }
-
-    public void createConnection() {
-        sessionServer = new Server(this);
-
-        // Server returns array of ints, containing IDs of users
-        int[] userIDs = sessionServer.establishConnection(); 
-        user = new User(userIDs[0]); // Create user and store ID
-        partner = new User (userIDs[1]); // Create interlocutor and store ID
-
-        sessionServer.setUsers(user, partner);
+        createConnection();
     }
 
     public void createGUI() {
-        sessionGUI = new GUI(this, user, partner);
+        sessionGUI = new GUI(this);
     }
 
-    // triggered by sessionGUI
+    public void createConnection() {
+        sessionConnection = new Connection(this);
+    }
+
+    public void setThreads(Thread sendMessages, Thread receiveMessages) {
+        _sendMessages = sendMessages;
+        _receiveMessages = receiveMessages;
+    }
+
+    // triggered by GUI
     public void sendMessage(Message msg) { 
-        sessionServer.sendMessage(msg);
     }
 
     // triggered by Server, passes on to GUI
