@@ -3,11 +3,18 @@
  * Command center of program
 */
 
+// Import BlockinQueue, ArrayBlockinQueue
+import java.util.concurrent.*;
+
 public class Session {
     GUI sessionGUI; // Interface
     Server sessionServer; // Server
     User user; // Person using program
     User partner; // Interlocutor
+
+    private BlockingQueue<Message> incoming = new ArrayBlockingQueue(20);
+    private BlockingQueue<Message> outgoing = new ArrayBlockingQueue(20);
+
 
     public void start() {
         createConnection();
