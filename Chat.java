@@ -9,6 +9,8 @@ import java.net.*;
 // For ObjectInputStream, ObjectOutputStream
 import java.io.*;
 
+import javax.swing.SwingWorker;
+
 public class Chat {
 
     private GUI _gui; // Interface
@@ -17,7 +19,7 @@ public class Chat {
 
     private Thread _messageSender;
     private Thread _messageReceiver;
-    private Thread _messageDisplayer;
+    private SwingWorker _messageDisplayer;
 
 
     public void start() {
@@ -44,13 +46,13 @@ public class Chat {
     public void createThreads(ObjectOutputStream outStream, ObjectInputStream inStream) {
         _messageSender = new MessageSender(_messageManager, outStream);
         _messageReceiver = new MessageReceiver(_messageManager, inStream);
-        // _messageDisplayer is Swing background worker
+        _messageDisplayer = new MessageDisplayer(_messageManager, _gui);
     }
 
     public void spawnThreads() {
         _messageSender.start();
         _messageReceiver.start();
-        // _messageDisplayer.start();
+        _messageDisplayer.execute();
     }
 
     public static void main(String[] args) {

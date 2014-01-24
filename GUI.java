@@ -62,7 +62,6 @@ public class GUI implements ActionListener /* ActionListener is an abstract inte
             display.setLineWrap(true);
             display.setWrapStyleWord(true);
         display.setEditable(false);
-        
         frame.getContentPane().add(new JScrollPane(writeHere));
             writeHere.setLineWrap(true);
             writeHere.setWrapStyleWord(true);
@@ -76,6 +75,10 @@ public class GUI implements ActionListener /* ActionListener is an abstract inte
 
     public String getMessage(){
         return message;
+    }
+
+    public JTextArea getDisplay() {
+        return display;
     }
 
     public static void main (String[] args){

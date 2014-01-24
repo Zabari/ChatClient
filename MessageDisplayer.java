@@ -3,17 +3,31 @@
  * Waits for new messages and adds to GUI
 */
 
-// For ObjectInputStream, ObjectOutputStream
-import java.io.*;
+import javax.swing.SwingWorker;
+import java.util.List;
 
-public class MessageDisplayer extends Thread {
+public class MessageDisplayer extends SwingWorker<Void, Message> {
     MessageManager _messageManager;
+    GUI _gui;
 
-    public MessageDisplayer(MessageManager messageManager) {
+    public MessageDisplayer(MessageManager messageManager, GUI gui) {
         _messageManager = messageManager;
+        _gui = gui;
     }
 
-    public void run() {
+    @Override
+    protected Void doInBackground() throws Exception {
+        while (true) {
+            _messageManager.inboxWait();
 
+            // We awoke!
+            Message incomingMsg = _messageManager.getInboxMessage();
+            publish(incomingMsg);
+        }
+    }
+
+    @Override
+    protected void process(List<Message> incomingMsg) {
+        _gui.getDisplay().append("Partner: "+ incomingMsg.get(0) + "\n");
     }
 }
