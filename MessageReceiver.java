@@ -6,7 +6,9 @@
 // For ObjectInputStream, ObjectOutputStream
 import java.io.*;
 
-public class MessageReceiver extends Thread {
+import java.util.TimerTask;
+
+public class MessageReceiver extends TimerTask {
     MessageManager _messageManager;
     ObjectInputStream _in;
 
@@ -16,6 +18,14 @@ public class MessageReceiver extends Thread {
     }
 
     public void run() {
-
+        System.out.println("Checking inbox...");
+        try {
+            Message newMessage;
+            while ((newMessage = (Message) _in.readObject()) != null) {
+                System.out.println(newMessage);
+            }
+        } catch (Exception e) {
+            System.out.println("ERROR: " + e);
+        }
     }
 }

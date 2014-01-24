@@ -39,6 +39,9 @@ public class Connection {
 
             ObjectOutputStream out =
                 new ObjectOutputStream(_sessionSocket.getOutputStream());
+            //http://stackoverflow.com/a/7586021/805556
+            out.flush();
+
             ObjectInputStream in =
                 new ObjectInputStream(_sessionSocket.getInputStream());
 

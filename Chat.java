@@ -9,6 +9,9 @@ import java.net.*;
 // For ObjectInputStream, ObjectOutputStream
 import java.io.*;
 
+import java.util.Timer;
+import java.util.TimerTask;
+
 public class Chat {
 
     private GUI _gui; // Interface
@@ -16,7 +19,11 @@ public class Chat {
     private MessageManager _messageManager;
 
     private Thread _messageSender;
-    private Thread _messageReceiver;
+
+    private TimerTask _messageReceiver;
+    private final int CHECK_INBOX_INTERVAL = 1000;
+    private Timer checkInboxTimer;
+
     private Thread _messageDisplayer;
 
 
@@ -49,7 +56,11 @@ public class Chat {
 
     public void spawnThreads() {
         _messageSender.start();
-        _messageReceiver.start();
+
+        // Start _messageReceiver at 1 second intervals
+        checkInboxTimer = new Timer();
+        checkInboxTimer.scheduleAtFixedRate(_messageReceiver, 1000, CHECK_INBOX_INTERVAL);
+
         // _messageDisplayer.start();
     }
 
