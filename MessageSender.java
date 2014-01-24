@@ -16,6 +16,16 @@ public class MessageSender extends Thread {
     }
 
     public void run() {
+        while (true) {
+            _messageManager.outboxWait();
 
+            // We awoke!
+            Message toSend = _messageManager.getOutboxMessage();
+            try {
+                _out.writeObject(toSend);
+            } catch (IOException e) {
+                System.out.println(e);
+            }
+        }
     }
 }

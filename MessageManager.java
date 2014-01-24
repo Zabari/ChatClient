@@ -78,6 +78,15 @@ public class MessageManager {
         }
     }
 
+    public Message getOutboxMessage(){
+        try {
+            return outbox.take();
+        } catch (InterruptedException e) {
+            System.out.println(e);
+            return null;
+        }
+    }
+
     public void setConnection(Connection connection) {
         _connection = connection;
     }
