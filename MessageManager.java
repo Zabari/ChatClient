@@ -27,6 +27,18 @@ public class MessageManager {
         outbox = new ArrayBlockingQueue(20);
     }
 
+    public void setConnection(Connection connection) {
+        _connection = connection;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public User getPartner() {
+        return partner;
+    }
+
     public void sendMessage(String msgContent) {
 	    //int senderID = user.getID();
 	    //int receiverID = partner.getID();
@@ -46,14 +58,14 @@ public class MessageManager {
         outboxNotify();
     }
 
-    public void inboxWait() {
-
+    public Message getOutboxMessage(){
+        try {
+            return outbox.take();
+        } catch (InterruptedException e) {
+            System.out.println(e);
+            return null;
+        }
     }
-
-    public void inboxNotify() {
-
-    }
-
 
     // Source: http://tutorials.jenkov.com/java-concurrency/thread-signaling.html#spuriouswakeups
     // Protected against missed signals and spurious wakeups
@@ -78,25 +90,32 @@ public class MessageManager {
         }
     }
 
-    public Message getOutboxMessage(){
+    public Message getInboxMessage(){
         try {
-            return outbox.take();
+            return inbox.take();
         } catch (InterruptedException e) {
             System.out.println(e);
             return null;
         }
     }
 
-    public void setConnection(Connection connection) {
-        _connection = connection;
+
+    public void inboxWait() {
+        synchronized(inbox) {
+            while (!incomingSignal) {
+                try {
+                    inbox.wait();
+                } catch (InterruptedException e) {
+                    System.out.println(e);
+                }
+            }
+        }
     }
 
-    public User getUser() {
-        return user;
+    public void inboxNotify() {
+        synchronized(inbox) {
+            incomingSignal = true;
+            inbox.notify();
+        }
     }
-
-    public User getPartner() {
-        return partner;
-    }
-    
 }
