@@ -19,13 +19,16 @@ public class MessageReceiver extends TimerTask {
 
     public void run() {
         System.out.println("Checking inbox...");
+        Message newMessage;
         try {
-            Message newMessage;
-            while ((newMessage = (Message) _in.readObject()) != null) {
-                System.out.println(newMessage);
-            }
+            // Hangs; see my SO question: http://stackoverflow.com/q/21323543/805556
+            newMessage = (Message) _in.readObject();
+            System.out.println(newMessage);
+        } catch (EOFException e) {
+            System.out.println("EOF");
+            break;
         } catch (Exception e) {
-            System.out.println("ERROR: " + e);
+            System.out.println(e);
         }
     }
 }
