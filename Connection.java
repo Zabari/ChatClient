@@ -4,17 +4,17 @@
 */
 
 // For Socket
-import java.net.*;
-
+import java.net.*; 
+//
 // For ObjectInputStream, ObjectOutputStream
 import java.io.*;
 
 public class Connection {
-    private Session _chatSession;
 
+    private Chat _chatSession;
     private Socket _sessionSocket;
-    private User user; // Person using program
-    private User partner; // Interlocutor
+
+    public final boolean LOCAL_TESTING = true;
 
     private final String REMOTE_HOST = "anon-chat-server.herokuapp.com";
     private final int REMOTE_PORT = 32990; 
@@ -23,14 +23,14 @@ public class Connection {
     private final int LOCAL_PORT = 9090;
 
 
-    public Connection(Session chatSession) {
+    public Connection(Chat chatSession) {
         _chatSession = chatSession;
-        establishConnection();
+        connectToServer();
     }
 
-    public void establishConnection() {
+    public void connectToServer() {
         try {
-            if (_chatSession.LOCAL_TESTING) {
+            if (LOCAL_TESTING) {
                 LOCAL_HOST = InetAddress.getByName(null);
                 _sessionSocket = new Socket(LOCAL_HOST, LOCAL_PORT);
             }
@@ -42,27 +42,13 @@ public class Connection {
             ObjectInputStream in =
                 new ObjectInputStream(_sessionSocket.getInputStream());
 
-            Thread sendMessages = new SendMessages(out);
-            Thread receiveMessages = new ReceiveMessages(in);
-
-            _chatSession.setThreads(sendMessages, receiveMessages);
+            _chatSession.createThreads(out, in);
 
         } catch (UnknownHostException e) {
             System.err.println("CONNECTION ERROR: Unknwown Host");
         } catch (Exception e) {
             System.err.println("CONNECTION ERROR: " + e);
         }
-        
-        user = new User();
-        partner = new User ();
-    }
-
-    public User getUser() {
-        return user;
-    }
-
-    public User getPartner() {
-        return partner;
     }
 
 }
