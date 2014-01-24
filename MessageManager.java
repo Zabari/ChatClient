@@ -51,11 +51,20 @@ public class MessageManager {
 			 msgContent, senderID, receiverID, senderID);
 
         try {
-        outbox.put(msgObject);
+            outbox.put(msgObject);
         } catch (InterruptedException e) {
             System.out.println(e);
         }
         outboxNotify();
+    }
+
+    public void displayMessage(Message incomingMsg) {
+        try {
+            inbox.put(incomingMsg);
+        } catch (InterruptedException e) {
+            System.out.println(e);
+        }
+        inboxNotify();
     }
 
     public Message getOutboxMessage(){

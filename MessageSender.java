@@ -20,9 +20,9 @@ public class MessageSender extends Thread {
             _messageManager.outboxWait();
 
             // We awoke!
-            Message toSend = _messageManager.getOutboxMessage();
+            Message outgoingMsg = _messageManager.getOutboxMessage();
             try {
-                _out.writeObject(toSend);
+                _out.writeObject(outgoingMsg);
             } catch (IOException e) {
                 System.out.println(e);
             }

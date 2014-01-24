@@ -6,9 +6,7 @@
 // For ObjectInputStream, ObjectOutputStream
 import java.io.*;
 
-import java.util.TimerTask;
-
-public class MessageReceiver extends TimerTask {
+public class MessageReceiver extends Thread {
     MessageManager _messageManager;
     ObjectInputStream _in;
 
@@ -18,17 +16,16 @@ public class MessageReceiver extends TimerTask {
     }
 
     public void run() {
-        System.out.println("Checking inbox...");
-        Message newMessage;
-        try {
-            // Hangs; see my SO question: http://stackoverflow.com/q/21323543/805556
-            newMessage = (Message) _in.readObject();
-            System.out.println(newMessage);
-        } catch (EOFException e) {
-            System.out.println("EOF");
-            break;
-        } catch (Exception e) {
-            System.out.println(e);
+        while (true) {
+            Message incomingMsg;
+            try {
+                incomingMsg = (Message) _in.readObject();
+                System.out.println("Server: " + incomingMsg);
+                _messageManager.displayMessage(incomingMsg);
+                
+            } catch (Exception e) {
+                System.out.println(e);
+            }
         }
     }
 }
